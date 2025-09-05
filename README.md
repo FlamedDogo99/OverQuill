@@ -1,2 +1,2 @@
 # Shortleaf-Mathquill
-Forks the shortleaf chrome extension to include a shortcut for opening a mathquill editor which pastes into the active overlead project.
+Forks the Shortleaf Chrome extension to include a shortcut for opening a Mathquill editor which pastes into the active Overleaf project.

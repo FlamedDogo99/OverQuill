@@ -1,0 +1,16 @@
+{
+  "name": "mathquill-overleaf",
+  "version": "0.0.1",
+  "description": "Adds mathquill interactive interface to overleaf",
+  "license": "MIT",
+  "author": "FlamedDogo99",
+  "type": "commonjs",
+  "main": "src/options.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "develop": " http-server -p 8080"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

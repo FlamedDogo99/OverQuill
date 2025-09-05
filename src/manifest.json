@@ -1,0 +1,32 @@
+{
+   "action": {
+      "default_popup": "popup.html"
+   },
+   "background": {
+      "service_worker": "service-worker.js"
+   },
+   "content_scripts": [ {
+     "js": [ "content-script.js"],
+     "matches": [ "https://*.overleaf.com/project/*" ]
+   }, {
+      "js": [ "deps/jquery.min.js", "deps/mathquill.min.js", "shortleaf.js" ],
+      "css": [ "content-script.css", "deps/mathquill.css" ],
+      "matches": [ "https://*.overleaf.com/project/*" ],
+      "world": "MAIN"
+   } ],
+   "description": "Custom keyboard shortcuts for Overleaf.",
+   "icons": {
+      "128": "icon128.png",
+      "16": "icon16.png",
+      "48": "icon48.png"
+   },
+   "manifest_version": 3,
+   "name": "Shortleaf",
+   "options_page": "options.html",
+   "permissions": [ "storage" ],
+   "version": "1.0.2",
+   "web_accessible_resources": [ {
+      "matches": [ "\u003Call_urls>" ],
+      "resources": [ "shortleaf.js", "popup.js", "shortleaf_pages.js", "shortleaf_pages.css", "default_config.json", "*.png" ]
+   } ]
+}
