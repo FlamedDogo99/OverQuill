@@ -9,9 +9,25 @@
     left: 0;
     right: 0;
     background-color: rgba(0,0,0,0.4);
+    flex-direction: column;
 }
 #mq-editor-field {
     display: inline-block;
     background-color: white;
     font-size: 2em;
+}
+#resultsDiv {
+    position: absolute;
+    text-align: left;
+    background-color: white;
+    border-width: 1px;
+    border-style: solid;
+    border-color: gray;
+    border-image: initial;
+}
+.resultSpan {
+    display: block;
+}
+.resultSpan:hover {
+    background-color: lightgray;
 }

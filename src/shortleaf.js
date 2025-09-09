@@ -152,6 +152,25 @@ function load_envs( environments ){
     bind_environment( e.shortcut, e.env );
   }
 }
+function getCommandWrapper(editorInstance) {
+  const cursor = editorInstance?.__controller?.cursor;
+  if(!cursor) return false;
+  const wrapper = cursor?.parent?.parent;
+  if(!wrapper) return false;
+  return wrapper._el.classList.contains("mq-latex-command-input-wrapper") ? wrapper : false;
+}
+function resultSpanClick(commandWrapper, editorInstance, command) {
+  commandWrapper.setDOM(commandWrapper.domFrag().children().lastElement());
+  commandWrapper.remove();
+  const cursor = editorInstance.__controller.cursor;
+  if (commandWrapper[1]) {
+    cursor.insLeftOf(commandWrapper[1]);
+  } else {
+    cursor.insAtRightEnd(commandWrapper.parent);
+  }
+  editorInstance.cmd(command);
+}
+
 function load_editor( editor ){
   let editorShown = false;
 
@@ -159,21 +178,67 @@ function load_editor( editor ){
   editorDiv.id = "editorDiv";
   const mathSpan = document.createElement('span');
   mathSpan.id = "mq-editor-field";
+  const resultsDiv = document.createElement('div');
+  resultsDiv.id = "resultsDiv"
   editorDiv.appendChild(mathSpan);
   document.body.appendChild(editorDiv);
   editorDiv.style.display = "none"
 
   const editorSpan = document.getElementById('mq-editor-field');
   const MQ = MathQuill.getInterface(2);
+  let cmds = [];
+  //TODO: Implement autofill navigation with keyboard events
+  let closestCommands = []
+  let highlightedSuggestionIndex = false;
+  let maxResultCount = 8
   const editorInstance = MQ.MathField(editorSpan, {
     spaceBehavesLikeTab: false,
     restrictMismatchedBrackets: false,
     autoCommands:
       "alpha beta sqrt theta phi rho pi tau nthroot cbrt sum prod integral percent infinity infty cross ans frac int gamma Gamma delta Delta epsilon zeta eta Theta iota kappa lambda Lambda mu Xi xi Pi sigma Sigma upsilon Upsilon Phi chi psi Psi omega Omega",
-    charsThatBreakOutOfSupSub: ""
-  })
+    charsThatBreakOutOfSupSub: "",
+    handlers: {
+      edit: function() {
+        resultsDiv.replaceChildren();
+        closestCommands = [];
+        highlightedSuggestionIndex = false;
+        const commandWrapper = getCommandWrapper(editorInstance);
+        if(commandWrapper) {
+          const text = commandWrapper.text()
+          if(text.length > 1) {
+            const partialCommand = text.slice(1);
+            let ufuzzy = new UfuzzyMin();
 
-  editorSpan.addEventListener("keydown", function(event) {
+            let idxs = ufuzzy.filter(cmds, partialCommand);
+            let info = ufuzzy.info(idxs, cmds, partialCommand);
+            let order = ufuzzy.sort(info, cmds, partialCommand);
+
+            const mark = (part, matched) => matched ? '<b>' + part + '</b>' : part;
+            for (let i = 0; i < Math.min(maxResultCount, order.length); i++) {
+              let infoIdx = order[i];
+              const command = cmds[info.idx[infoIdx]]
+              closestCommands.push(command);
+              const resultSpan = document.createElement("span");
+              resultSpan.id = "result-" + i;
+              resultSpan.classList.add("resultSpan")
+              resultSpan.innerHTML = UfuzzyMin.highlight(cmds[info.idx[infoIdx]], info.ranges[infoIdx], mark);
+              resultSpan.addEventListener("click", ()=>{
+                resultSpanClick(commandWrapper, editorInstance, command);
+              },{once: true});
+              resultsDiv.appendChild(resultSpan);
+            }
+            if(order.length > 0) {
+              highlightedSuggestionIndex = 1;
+            }
+          }
+        }
+      }
+    }
+  })
+  cmds = editorInstance.getCommandKeys();
+
+  editorSpan.appendChild(resultsDiv)
+  editorDiv.addEventListener("keydown", function(event) {
     if(!editorShown) return;
     const isReturn = event.key === "Enter";
     const isEscape = event.key === "Escape";
