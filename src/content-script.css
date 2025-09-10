@@ -31,3 +31,27 @@
 .resultSpan:hover {
     background-color: lightgray;
 }
+.resultSpan.active {
+    background-color: aliceblue;
+}
+.resultSpan:after {
+    content: "tab";
+    font-size: 0.4em;
+    margin: 0.5em;
+    border-radius: 0.25em;
+    padding: 0.125em;
+    border-color: var(--resultSpanColor, transparent);;
+    border-width: 0.09em;
+    border-style: solid;
+    color: var(--resultSpanColor, transparent);
+    text-align: right;
+    float:right;
+}
+.resultSpan:not(.active):after {
+    --resultSpanColor: transparent;
+}
+.resultSpan.active:after,
+#resultsDiv:not(:has(.active)) > span:first-child:after {
+    --resultSpanColor: gray;
+}
+

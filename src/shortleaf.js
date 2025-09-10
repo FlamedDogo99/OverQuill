@@ -8,6 +8,9 @@
 let cm, view, keymap, kb_compartment;
 let Prec = null;
 
+function modulo(a, b) {
+  return ((a % b) + b) % b
+}
 
 // Get the bindings for the codemirror API
 let get_codemirror = new Promise( 
@@ -133,8 +136,6 @@ function bind_environment( shortcut, environment){
   bind_command( shortcut, "\\begin{"+environment+"}\n\t%.%\n\\end{"+environment+"}\n" );
 }
 
-
-
 function load_symbols( symbols ){
   for (const s of symbols){
     bind_symbol( s.shortcut, s.command );
@@ -159,16 +160,19 @@ function getCommandWrapper(editorInstance) {
   if(!wrapper) return false;
   return wrapper._el.classList.contains("mq-latex-command-input-wrapper") ? wrapper : false;
 }
-function resultSpanClick(commandWrapper, editorInstance, command) {
-  commandWrapper.setDOM(commandWrapper.domFrag().children().lastElement());
-  commandWrapper.remove();
-  const cursor = editorInstance.__controller.cursor;
-  if (commandWrapper[1]) {
-    cursor.insLeftOf(commandWrapper[1]);
-  } else {
-    cursor.insAtRightEnd(commandWrapper.parent);
-  }
-  editorInstance.cmd(command);
+
+/**
+ * List of fuzzy matched command and environment suggestions
+ * @type {text: string, element: HTMLSpanElement}
+ */
+let closestCommands = []
+let shownResultsCount = 0;
+let highlightedSuggestionIndex = false;
+
+function setResultHighlighted(index) {
+  if(highlightedSuggestionIndex !== false) closestCommands[highlightedSuggestionIndex].element.classList.remove("active");
+  if(index !== false) closestCommands[index].element.classList.add("active");
+  highlightedSuggestionIndex = index;
 }
 
 function load_editor( editor ){
@@ -186,10 +190,12 @@ function load_editor( editor ){
 
   const editorSpan = document.getElementById('mq-editor-field');
   const MQ = MathQuill.getInterface(2);
+  /**
+   * The list of all LatexCmds and EvironmentCmds
+   * @type string[]
+   */
   let cmds = [];
   //TODO: Implement autofill navigation with keyboard events
-  let closestCommands = []
-  let highlightedSuggestionIndex = false;
   let maxResultCount = 8
   const editorInstance = MQ.MathField(editorSpan, {
     spaceBehavesLikeTab: false,
@@ -204,6 +210,19 @@ function load_editor( editor ){
         highlightedSuggestionIndex = false;
         const commandWrapper = getCommandWrapper(editorInstance);
         if(commandWrapper) {
+          if(!commandWrapper.shortleafFix) {
+            commandWrapper.shortleafFix = true;
+            const endsL = commandWrapper.getEnd(-1);
+            let originalLatex = endsL.latex;
+            endsL.latex = function() {
+              return highlightedSuggestionIndex === false ? originalLatex.call(endsL) : closestCommands[highlightedSuggestionIndex].text;
+            }
+            let originalKeystroke = endsL.keystroke;
+            endsL.keystroke = function (key, e, ctrlr) {
+              if(key === 'Tab' && closestCommands.length > 0 && highlightedSuggestionIndex === false) highlightedSuggestionIndex = 0;
+              originalKeystroke.call(endsL, key, e, ctrlr);
+            }
+          }
           const text = commandWrapper.text()
           if(text.length > 1) {
             const partialCommand = text.slice(1);
@@ -214,21 +233,20 @@ function load_editor( editor ){
             let order = ufuzzy.sort(info, cmds, partialCommand);
 
             const mark = (part, matched) => matched ? '<b>' + part + '</b>' : part;
-            for (let i = 0; i < Math.min(maxResultCount, order.length); i++) {
+            shownResultsCount = Math.min(maxResultCount, order.length);
+            for (let i = 0; i < shownResultsCount; i++) {
               let infoIdx = order[i];
               const command = cmds[info.idx[infoIdx]]
-              closestCommands.push(command);
               const resultSpan = document.createElement("span");
               resultSpan.id = "result-" + i;
               resultSpan.classList.add("resultSpan")
               resultSpan.innerHTML = UfuzzyMin.highlight(cmds[info.idx[infoIdx]], info.ranges[infoIdx], mark);
               resultSpan.addEventListener("click", ()=>{
-                resultSpanClick(commandWrapper, editorInstance, command);
+                highlightedSuggestionIndex = i;
+                commandWrapper.renderCommand(editorInstance.__controller.cursor);
               },{once: true});
               resultsDiv.appendChild(resultSpan);
-            }
-            if(order.length > 0) {
-              highlightedSuggestionIndex = 1;
+              closestCommands.push({text:command, element: resultSpan});
             }
           }
         }
@@ -238,46 +256,69 @@ function load_editor( editor ){
   cmds = editorInstance.getCommandKeys();
 
   editorSpan.appendChild(resultsDiv)
-  editorDiv.addEventListener("keydown", function(event) {
+
+  editorSpan.addEventListener("keydown", function(event) {
     if(!editorShown) return;
     const isReturn = event.key === "Enter";
     const isEscape = event.key === "Escape";
     if(isReturn || isEscape) {
       event.preventDefault();
       event.stopPropagation();
-      isReturn && view.dispatch( view.state.replaceSelection(editorInstance.latex()));
+      isReturn && view.dispatch(view.state.replaceSelection(editorInstance.latex()));
       editorInstance.latex("");
       editorShown = false;
       editorDiv.style.display = "none";
       view.focus()
       return false;
     }
+    if(event.metaKey) {
+      if(event.key === "ArrowUp") {
+        event.preventDefault();
+        event.stopPropagation();
+        editorInstance.matrixCmd("addRow", -1);
+        return false;
+      } else if (event.key === "ArrowDown") {
+        event.preventDefault();
+        event.stopPropagation()
+        editorInstance.matrixCmd('deleteRow');
+        return false;
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        event.stopPropagation()
+        editorInstance.matrixCmd('addColumn', -1);
+        return false;
+      } else if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        event.stopPropagation()
+        editorInstance.matrixCmd('deleteColumn');
+        return false;
+      }
+    } else {
+      if(closestCommands.length > 0) {
+        if(event.key === "ArrowUp") {
+          event.preventDefault();
+          event.stopPropagation();
+          if(highlightedSuggestionIndex !== false) {
+            setResultHighlighted(modulo(highlightedSuggestionIndex - 1, closestCommands.length));
+          } else {
+            setResultHighlighted(0);
+          }
 
-    if(!event.metaKey) return;
-    if(event.key === "ArrowUp") {
-      debugger;
-      event.preventDefault();
-      event.stopPropagation();
-      editorInstance.matrixCmd("addRow", -1);
-      return false;
-    } else if (event.key === "ArrowDown") {
-      event.preventDefault();
-      event.stopPropagation()
-      editorInstance.matrixCmd('deleteRow');
-      return false;
-    } else if (event.key === "ArrowRight") {
-      debugger;
-      event.preventDefault();
-      event.stopPropagation()
-      editorInstance.matrixCmd('addColumn', -1);
-      return false;
-    } else if (event.key === "ArrowLeft") {
-      event.preventDefault();
-      event.stopPropagation()
-      editorInstance.matrixCmd('deleteColumn');
-      return false;
+          return false;
+        } else if (event.key === "ArrowDown") {
+          event.preventDefault();
+          event.stopPropagation()
+          if(highlightedSuggestionIndex !== false) {
+            setResultHighlighted(modulo(highlightedSuggestionIndex + 1, closestCommands.length));
+          } else {
+            setResultHighlighted(0);
+          }
+
+          return false;
+        }
+      }
     }
-  })
+  }, false);
 
   bind_function(editor[0].shortcut, function() {
     editorShown = editorShown === false;
