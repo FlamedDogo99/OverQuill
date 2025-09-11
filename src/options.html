@@ -1,61 +1,28 @@
 <html lang="en">
 <head>
-    <title>Shortleaf options</title>
-    <script src='./shortleaf_pages.js'></script>
-    <link rel="stylesheet" href="./shortleaf_pages.css">
+    <title>OverQuill options</title>
+    <link rel="stylesheet" href="./options.css">
 </head>
 <body>
 <div class='panel' id='body'>
     <br>
     <div class="centered">
         <p id='title'>
-            <i id='title-icon'></i>hortleaf
+            <i id='title-icon'></i>verQuill
         </p>
-        <p id='subtitle'>Set your overleaf shortcuts</p>
+        <p id='subtitle'>Customize shortcuts</p>
     </div>
-    <span id='symbols_toggle' class='toggle'>&#x25B6; Symbols</span>
-    <span id='symbols' class='collapsable collapsed center-content'>
-        <br>
-        <span class="p">Symbols are inserted at the selected location(s).</span>
-        <span class="p">( Name / Command / Shortcut )</span>
-        <br>
-      </span>
-    <br>
-    <span id='commands_toggle' class='toggle'>&#x25B6; Commands</span>
-    <div id='commands' class='collapsable collapsed center-content'>
-        <br>
-        <span class='help'>
-          <span class="p">Commands take the current selection as an argument. <sup class='help_icon'>?</sup>
-          </span>
-          <span class='help_message'>
-            <span class="p">The smart insertion will by default auto-detect the first empty brackets (curly {} or square []) in the command as where to insert the selected text and keep that selection. For example, the default Alt-\ command by default takes *selection* into \frac{*selection*}{}. Both of these behaviours can be customized separately. The selection insertion point can be specified with %.%, which is replaced with the selected text, as in the Alt-( default command. The desired end selection can be bounded with %|%, as in the Alt-` default command. For an empty end selection (i.e. a cursor position), one %|% suffices. </span>
-          </span>
-        </span>
-        <br> ( Name / Command / Shortcut ) <br>
-    </div>
-    <br>
-    <span id='envs_toggle' class='toggle'>&#x25B6; Environments</span>
-    <div id='envs' class='collapsable collapsed center-content'>
-        <br>
-        <p>Smart insertion of environments.</p>
-        <br> ( Name / Environment / Shortcut ) <br>
-        <br>
-    </div>
-    <br>
-    <span id='editor_toggle' class='toggle'>&#x25B6; Editor</span>
-    <div id='editor' class='collapsable collapsed center-content'>
-        <br>
-        <p>Editor</p>
-        <br> ( Shortcut ) <br>
-        <br>
+    <div id="editor">
+        <label for="editorShortcut">Open Editor </label><input id="editorShortcut">
     </div>
 </div>
-<span id='footer' class='panel'>
+    <span id='footer' class='panel'>
       <span class="centered">
-        <span class="p">Changes are saved automatically. Names are for your reference only.</span>
-        <button type='button' id='reset_config'>Reset to defaults</button>
+        <span class="p">Changes are saved automatically</span>
+        <button type='button' id='reset_config'>Reset to default</button>
         <br>
       </span>
     </span>
+    <script src='./options.js'></script>
 </body>
 </html>

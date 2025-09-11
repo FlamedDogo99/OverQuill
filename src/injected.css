@@ -25,7 +25,8 @@
     border-color: gray;
     border-image: initial;
 }
-.resultSpan {
+#mq-editor-field .resultSpan {
+    font-family: "Times New Roman", serif;
     display: block;
 }
 .resultSpan:hover {
