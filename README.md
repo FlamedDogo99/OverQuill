@@ -1,4 +1,4 @@
-<img src="src/icon128.png" alt="Eagler Mobile Logo" align="left" width="53px"></img>
+<img src="src/icon128.png" alt="Eagler Mobile Logo" align="left" width="63px"></img>
 # VerQuill
 
 #### Interactive LaTeX editing in Overleaf, using a custom build of MathQuill
