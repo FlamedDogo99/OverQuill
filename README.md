@@ -49,7 +49,9 @@
 - [jQuery](https://github.com/jquery/jquery) - jQuery JavaScript Library
   - Needed for MathQuill
 - [Shortleaf](https://github.com/andre-al/shortleaf) - Chrome browser extension that adds customizable keyboard shortcuts to the Overleaf online latex editor
-  - Shortleaf is the original project that this was built from 
+  - Shortleaf is the original project that this was built from
+- [markdown-to-html-github-style](https://github.com/KrauseFx/markdown-to-html-github-style)
+  - Used for creating the instructions page
 
 ## License
 

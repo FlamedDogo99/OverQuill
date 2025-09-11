@@ -16,7 +16,11 @@ chrome.runtime.onInstalled.addListener(function(details){
       .catch(reason => {
         console.debug(reason);
         throw new Error("Couldn't set settings on install");
-      })
+      });
+    chrome.tabs.create({url: '/instructions.html'})
+      .catch(reason => {
+        console.error(reason)
+      });
   }
 });
 chrome.action.onClicked.addListener(() => {

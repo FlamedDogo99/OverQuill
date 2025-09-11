@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>OverQuill Instructions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./instructions.css">
+</head>
+<body>
+<div id='content'>
+    <p>
+        <img src="./icon128.png" alt="OverQuill Logo" align="left" width="48px"></img>
+    </p>
+    <h1 id="verquill">VerQuill</h1>
+    <h4 id="interactive-latex-editing-in-overleaf-using-a-custom-build-of-mathquill">Interactive LaTeX editing in Overleaf, using a custom build of MathQuill</h4>
+    <h2 id="keyboard-shortcuts">Keyboard Shortcuts</h2>
+    <p>
+        <b>Open Editor:</b>
+        <kbd>Alt + t</kbd> - Open the in-editor MathQuill editor
+    </p>
+    <ul>
+        <li>Must be editing inside the Overleaf code editor </li>
+        <li>Shortcut can be configured in the extension's options menu</li>
+    </ul>
+    <p>
+        <b>LaTeX Command:</b>
+        <kbd>\</kbd> - Invoke one of MathQuill's LaTeX commands
+    </p>
+    <ul>
+        <li>Must be editing inside the MathQuill editor</li>
+        <li>Suggestions will be displayed below the editor for all registered LaTeX commands and Environment commands</li>
+    </ul>
+    <p>
+        <b>Add Matrix Row:</b>
+        <kbd>Command + Up Arrow</kbd> - Add a row to the current Matrix
+    </p>
+    <ul>
+        <li>Must be editing inside the MathQuill editor and inside a matrix environment</li>
+    </ul>
+    <p>
+        <b>Add Matrix Column:</b>
+        <kbd>Command + Right Arrow</kbd> - Add a column to the current Matrix
+    </p>
+    <ul>
+        <li>Must be editing inside the MathQuill editor and inside a matrix environment</li>
+    </ul>
+    <p>
+        <b>Remove Matrix Row:</b>
+        <kbd>Command + Down Arrow</kbd> - Remove a row to the current Matrix
+    </p>
+    <ul>
+        <li>Must be editing inside the MathQuill editor and inside a matrix environment</li>
+    </ul>
+    <p>
+        <b>Add Matrix Column:</b>
+        <kbd>Command + Left Arrow</kbd> - Remove a column to the current Matrix
+    </p>
+    <ul>
+        <li>Must be editing inside the MathQuill editor and inside a matrix environment</li>
+    </ul>
+    <p>
+        <b>Use Suggested LaTeX Command:</b>
+        <kbd>Tab</kbd> - Call a suggested LaTeX command
+    </p>
+    <ul>
+        <li>Must be editing inside the MathQuill editor and writing a command</li>
+        <li>By default, the first suggestion will be used to complete the command</li>
+        <li>Other suggestions can be navigated through with <kbd>Up Arrow</kbd> and <kbd>Down Arrow</kbd>, or by mouse </li>
+        <li>If no suggestions exist, it will default to MathQuill's default behavior</li>
+    </ul>
+    <p>
+        <b>Use Written LaTeX Command:</b>
+        <kbd>Space</kbd> - Call the LaTeX command without suggestions
+    </p>
+    <ul>
+        <li>Must be editing inside the MathQuill editor and writing a command</li>
+        <li>Uses MathQuill's default behavior for LaTeX commands</li>
+    </ul>
+    <p>
+        <b>Insert LaTeX Into Overleaf</b>
+        <kbd>Return</kbd> - Insert LaTeX into the Overleaf document
+    </p>
+    <ul>
+        <li>Must be editing inside the MathQuill editor</li>
+    </ul>
+    <p>
+        <b>Exit Editor</b>
+        <kbd>Escape</kbd> - Exit the MathQuill Editor
+    </p>
+    <ul>
+        <li>Must be editing inside the MathQuill editor</li>
+        <li>Any LaTeX written inside the editor will be discarded</li>
+    </ul>
+    <h2 id="credits">Credits</h2>
+    <ul>
+        <li>
+            <a href="https://github.com/FlamedDogo99/mathquill/tree/interactive-tweaks">MathQuill Interactive Tweaks</a> - A fork of MathQuill used for <a href="https://flameddogo99.github.io/Mathquill-Ineractive/">MathQuill Interactive</a>
+        </li>
+        <li>
+            <a href="https://github.com/leeoniya/uFuzzy">uFuzzy</a> - A tiny, efficient fuzzy search that doesn't suck
+            <ul>
+                <li>Fuzzy searching used for suggesting LaTeX commands</li>
+            </ul>
+        </li>
+        <li>
+            <a href="https://github.com/jquery/jquery">jQuery</a> - jQuery JavaScript Library
+            <ul>
+                <li>Needed for MathQuill</li>
+            </ul>
+        </li>
+        <li>
+            <a href="https://github.com/andre-al/shortleaf">Shortleaf</a> - Chrome browser extension that adds customizable keyboard shortcuts to the Overleaf online latex editor
+            <ul>
+                <li>Shortleaf is the original project that this was built from </li>
+            </ul>
+        </li>
+        <li>
+            <a href="https://github.com/KrauseFx/markdown-to-html-github-style">markdown-to-html-github-style</a> - Generate a simple HTML page based on a markdown file, that looks like GitHub's stylesheet
+            <ul>
+                <li>Used for creating the instructions page</li>
+            </ul>
+        </li>
+    </ul>
+    <h2 id="license">License</h2>
+    <p>OverQuill is licensed under the terms of the MIT license.</p>
+</div>
+</body>
+</html>
