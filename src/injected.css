@@ -55,4 +55,3 @@
 #resultsDiv:not(:has(.active)) > span:first-child:after {
     --resultSpanColor: gray;
 }
-
