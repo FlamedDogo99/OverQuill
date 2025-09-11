@@ -10,7 +10,7 @@
        "matches": [ "https://*.overleaf.com/project/*" ]
      }
    ],
-   "description": "Custom keyboard shortcuts for Overleaf.",
+   "description": "Interactive LaTeX editing in Overleaf, using a custom build of MathQuill",
    "icons": {
       "128": "icon128.png",
       "16": "icon16.png",
