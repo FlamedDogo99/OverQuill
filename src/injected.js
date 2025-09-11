@@ -216,18 +216,18 @@ function loadShortcuts(shortcuts){
 
 
 getCodeMirror.then( ()=>{
-  let kbCompartmentLoad = getView().then( ()=>{
+  let kbCompartmentLoad = getView().then(()=> {
       let oldCompartment = view.state.config.compartments.keys().next();
-      kbCompartment = oldCompartment.value.of( keymap.of([]) );
+      kbCompartment = oldCompartment.value.of(keymap.of([]));
       kbCompartment.compartment =  new oldCompartment.value.constructor;
       
       function getPrec(configBase){
         if(Array.isArray(configBase)) {
           for(const child of configBase.values() ){
             getPrec(child)
-            if(Prec !== null ) return;
+            if(Prec !== null) return;
           }
-        } else{
+        } else {
           if("prec" in configBase) {
             Prec = configBase.constructor;
           }
@@ -250,7 +250,7 @@ getCodeMirror.then( ()=>{
 
   function prepareForShortcuts(){
     getView()
-      .then(()=>{return kbCompartmentLoad})
+      .then(()=> {return kbCompartmentLoad})
       .then(() => {
         view.dispatch({effects: codeMirror.StateEffect.appendConfig.of([kbCompartment])});
         setupMathQuill();

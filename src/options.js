@@ -13,7 +13,10 @@ function updateOverquillConfig(keybind){
           'openEditor': keybind
         }
 			}
-	});
+	})
+    .catch(reason => {
+      console.error(reason);
+    });
 }
 
 function optionsPage(){
@@ -35,4 +38,3 @@ function optionsPage(){
 }
 
 optionsPage();
-

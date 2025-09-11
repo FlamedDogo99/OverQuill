@@ -1,4 +1,3 @@
-
 function sendConfig(){
   chrome.storage.sync.get( { 'overquill_config': {} },
     function(data){
@@ -7,7 +6,6 @@ function sendConfig(){
   );
 }
 document.addEventListener('overquill_config_listen', sendConfig);
-
 
 chrome.storage.onChanged.addListener(
   function( changes, area ){
@@ -35,16 +33,6 @@ window.addEventListener('load', function(){
 });
 
 function injectIntoMain() {
-  // const injectMathQuillCSS = document.createElement("link");
-  // injectMathQuillCSS.rel = "stylesheet"
-  // injectMathQuillCSS.href = chrome.runtime.getURL("deps/mathquill/mathquill.css");
-  // document.head.appendChild(injectMathQuillCSS);
-  //
-  // const injectCSS = document.createElement("link");
-  // injectCSS.rel = "stylesheet";
-  // injectCSS.href = chrome.runtime.getURL("injected.css");
-  // document.head.appendChild(injectCSS);
-
   const injectScript = document.createElement("script");
   injectScript.type = "module";
   injectScript.src = chrome.runtime.getURL("injected.js");
