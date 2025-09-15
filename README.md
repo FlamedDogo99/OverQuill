@@ -3,6 +3,14 @@
 
 #### Interactive LaTeX editing in Overleaf, using a custom build of MathQuill
 
+[![Chrome Web Store](.github/readme-images/chrome-extension-badge.png)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
+[![Firefox Add-ons](.github/readme-images/firefox-addon-badge.png)](https://addons.mozilla.org/firefox/addon/overquill/)
+
+[![](https://img.shields.io/chrome-web-store/v/fdopniggnnohabdneopllnpfddhahlon?style=flat-square&logo=google-chrome&logoColor=white&label=Chrome&color=E23A2E)](https://chrome.google.com/webstore/detail/fdopniggnnohabdneopllnpfddhahlon)
+[![](https://img.shields.io/amo/v/overquill?style=flat-square&logo=firefox-browser&logoColor=white&label=Firefox&color=FF7139)](https://addons.mozilla.org/firefox/addon/overquill/)
+[![](https://img.shields.io/github/v/release/FlamedDogo99/OverQuill?style=flat-square&logo=github&logoColor=white&label=GitHub&color=181717)](https://github.com/FlamedDogo99/OverQuill/releases)
+[![](https://img.shields.io/github/license/FlamedDogo99/OverQuill?style=flat-square)](https://github.com/FlamedDogo99/OverQuill/blob/master/LICENSE)
+
 ## Keyboard Shortcuts
 <b>Open Editor:</b> <kbd>Alt + t</kbd> - Open the in-editor MathQuill editor
  - Must be editing inside the Overleaf code editor 
@@ -46,8 +54,6 @@
 - [MathQuill Interactive Tweaks](https://github.com/FlamedDogo99/mathquill/tree/interactive-tweaks) - A fork of MathQuill used for [MathQuill Interactive](https://flameddogo99.github.io/Mathquill-Ineractive/)
 - [uFuzzy](https://github.com/leeoniya/uFuzzy) - A tiny, efficient fuzzy search that doesn't suck
   - Fuzzy searching used for suggesting LaTeX commands
-- [jQuery](https://github.com/jquery/jquery) - jQuery JavaScript Library
-  - Needed for MathQuill
 - [Shortleaf](https://github.com/andre-al/shortleaf) - Chrome browser extension that adds customizable keyboard shortcuts to the Overleaf online latex editor
   - Shortleaf is the original project that this was built from
 - [markdown-to-html-github-style](https://github.com/KrauseFx/markdown-to-html-github-style)

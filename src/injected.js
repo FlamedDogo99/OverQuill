@@ -1,13 +1,16 @@
 import {MathQuill} from "./deps/mathquill/mathquill.min.js"
 import {UfuzzyMin} from "./deps/ufuzzy/ufuzzy.min.js"
-import * as jQuery from "./deps/jquery/jquery.min.js";
-let $ = jQuery.$;
 
 let codeMirror, view, keymap, kbCompartment;
 let Prec = null;
 
 function modulo(a, b) {
   return ((a % b) + b) % b
+}
+
+HTMLElement.prototype.htmlContent = function(html) {
+  const dom = new DOMParser().parseFromString('<template>'+html+'</template>', 'text/html').head;
+  this.appendChild(dom.firstElementChild.content);
 }
 
 // Get the bindings for the codemirror API
@@ -73,7 +76,7 @@ function setupMathQuill() {
   editorDiv.style.display = "none"
 
   const editorSpan = document.getElementById('mq-editor-field');
-  const MQ = MathQuill.getInterface(2);
+  const MQ = MathQuill.getInterface(3);
   /**
    * The list of all LatexCmds and EvironmentCmds
    * @type string[]
@@ -123,7 +126,7 @@ function setupMathQuill() {
               const resultSpan = document.createElement("span");
               resultSpan.id = "result-" + i;
               resultSpan.classList.add("resultSpan")
-              resultSpan.innerHTML = UfuzzyMin.highlight(registeredCommands[info.idx[infoIdx]], info.ranges[infoIdx], mark);
+              resultSpan.htmlContent( UfuzzyMin.highlight(registeredCommands[info.idx[infoIdx]], info.ranges[infoIdx], mark));
               resultSpan.addEventListener("click", ()=>{
                 suggestionIndex = i;
                 commandWrapper.renderCommand(editorInstance.__controller.cursor);
@@ -237,7 +240,7 @@ getCodeMirror.then( ()=>{
       getPrec(view.state.config.base);
     });
 
-  document.addEventListener('overquill_config_send', (e)=>{   
+  document.addEventListener('overquill_config_send', (e)=> {
     const settings = e.detail.overquill_config;
     shortcuts = [];
     loadShortcuts(settings.shortcuts);
@@ -260,4 +263,20 @@ getCodeMirror.then( ()=>{
 
   prepareForShortcuts();
   window.addEventListener( 'doc:after-opened', prepareForShortcuts );
+});
+
+// Fix shortcuts with dead keys, by intercepting when pressed and relaying if space is pressed.
+window.addEventListener('load', function() {
+  document.addEventListener('keydown', (deadEvent) => {
+    if (deadEvent.key === 'Dead') {
+      document.addEventListener('keydown', spaceEvent => {
+          if (spaceEvent.code === 'Space') {
+            const init = {code: deadEvent.code, key: spaceEvent.key, altKey: deadEvent.altKey, cancelable: true}
+            let reformattedEvent = new KeyboardEvent('keydown', init);
+            if (!spaceEvent.target.dispatchEvent(reformattedEvent)) spaceEvent.preventDefault()
+          }
+        }, {once: true}
+      );
+    }
+  });
 });

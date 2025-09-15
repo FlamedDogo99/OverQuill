@@ -1,7 +1,9 @@
 function sendConfig(){
   chrome.storage.sync.get( { 'overquill_config': {} },
     function(data){
-      document.dispatchEvent(new CustomEvent('overquill_config_send', { detail: data } ));
+      // Firefox is a freak
+      const sendData = typeof cloneInto === "function" ? cloneInto(data, document.defaultView) : data;
+      document.dispatchEvent(new CustomEvent('overquill_config_send', { detail: sendData } ));
     }
   );
 }
@@ -15,26 +17,27 @@ chrome.storage.onChanged.addListener(
   }
 );
 
-// Fix shortcuts with dead keys, by intercepting when pressed and relaying if space is pressed.
-window.addEventListener('load', function(){
-  injectIntoMain();
-  document.addEventListener( 'keydown', (deadEvent) => {
-    if(deadEvent.key === 'Dead') {
-      document.addEventListener( 'keydown', spaceEvent=> {
-          if(spaceEvent.code === 'Space') {
-            const init = { code: deadEvent.code, key: spaceEvent.key, altKey: deadEvent.altKey, cancelable: true }
-            let reformattedEvent = new KeyboardEvent( 'keydown', init);
-            if(!spaceEvent.target.dispatchEvent( reformattedEvent )) spaceEvent.preventDefault()
-          }
-        },{once: true}
-      );
-    }
-  });
-});
 
 function injectIntoMain() {
   const injectScript = document.createElement("script");
   injectScript.type = "module";
   injectScript.src = chrome.runtime.getURL("injected.js");
   document.body.appendChild(injectScript);
+
+  // Load MathQuill Fonts
+  const fontPath = chrome.runtime.getURL("deps/mathquill/fonts/");
+  const fontPathTemplate = (font) => `url(${fontPath}${font})`;
+  const fontIE = new FontFace("Symbola", fontPathTemplate("Symbola.eot"));
+  fontIE.load()
+    .then(() => {
+      document.fonts.add(fontIE);
+    });
+
+  const fontNormalSrc = `local("Symbola Regular"), local("Symbola"), ${fontPathTemplate("Symbola.woff2")} format("woff2"), ${fontPathTemplate("Symbola.woff")} format("woff"), ${fontPathTemplate("Symbola.ttf")} format("truetype"), ${fontPathTemplate("Symbola.svg#Symbola")} format("svg")`
+  const fontStandard = new FontFace("Symbola", fontNormalSrc);
+  fontStandard.load()
+    .then(() => {
+      document.fonts.add(fontStandard);
+    });
 }
+injectIntoMain();
