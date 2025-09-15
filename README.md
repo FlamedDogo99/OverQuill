@@ -3,7 +3,7 @@
 
 #### Interactive LaTeX editing in Overleaf, using a custom build of MathQuill
 
-[![Chrome Web Store](.github/readme-images/chrome-extension-badge.png)](https://chrome.google.com/webstore/detail/fbeffbjdlemaoicjdapfpikkikjoneco)
+[![Chrome Web Store](.github/readme-images/chrome-extension-badge.png)](https://chrome.google.com/webstore/detail/fdopniggnnohabdneopllnpfddhahlon)
 [![Firefox Add-ons](.github/readme-images/firefox-addon-badge.png)](https://addons.mozilla.org/firefox/addon/overquill/)
 
 [![](https://img.shields.io/chrome-web-store/v/fdopniggnnohabdneopllnpfddhahlon?style=flat-square&logo=google-chrome&logoColor=white&label=Chrome&color=E23A2E)](https://chrome.google.com/webstore/detail/fdopniggnnohabdneopllnpfddhahlon)
