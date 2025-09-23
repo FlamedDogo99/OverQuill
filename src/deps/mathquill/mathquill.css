@@ -25,11 +25,6 @@
   text-align: left;
   overflow: hidden;
 }
-@font-face {
-  font-family: Symbola;
-  src: url(chrome-extension://__MSG_@@extension_id__/deps/mathquill/fonts/Symbola.eot);
-  src: local("Symbola Regular"), local("Symbola"), url(chrome-extension://__MSG_@@extension_id__/deps/mathquill/fonts/Symbola.woff2) format("woff2"), url(chrome-extension://__MSG_@@extension_id__/deps/mathquill/fonts/Symbola.woff) format("woff"), url(chrome-extension://__MSG_@@extension_id__/deps/mathquill/fonts/Symbola.ttf) format("truetype"), url(chrome-extension://__MSG_@@extension_id__/deps/mathquill/fonts/Symbola.svg#Symbola) format("svg");
-}
 .mq-editable-field {
   display: -moz-inline-box;
   display: inline-block;
@@ -251,6 +246,39 @@
 }
 .mq-math-mode .mq-int > .mq-supsub > .mq-sub {
   margin-left: -0.35em;
+}
+.mq-math-mode .mq-int > big {
+  display: inline-block;
+  -webkit-transform: scaleX(0.7);
+  -moz-transform: scaleX(0.7);
+  -ms-transform: scaleX(0.7);
+  -o-transform: scaleX(0.7);
+  transform: scaleX(0.7);
+  vertical-align: -0.16em;
+}
+.mq-math-mode .mq-int > .mq-supsub {
+  font-size: 80%;
+  vertical-align: -1.1em;
+  padding-right: .2em;
+}
+.mq-math-mode .mq-int > .mq-supsub > .mq-sup > .mq-sup-inner {
+  vertical-align: 1.3em;
+}
+.mq-math-mode .mq-int > .mq-supsub > .mq-sub {
+  margin-left: -0.35em;
+}
+.mq-math-mode .mq-limit {
+  text-align: center;
+}
+.mq-math-mode .mq-limit .mq-lim {
+  display: block;
+}
+.mq-math-mode .mq-limit .mq-approaches {
+  font-size: 80%;
+  float: right;
+  /* take out of normal flow to manipulate baseline */
+  width: 100%;
+  display: block;
 }
 .mq-math-mode .mq-roman {
   font-style: normal;
@@ -518,6 +546,28 @@
   /* defensive resets */
   padding: 0.1em 0.3em;
   vertical-align: baseline;
+}
+.mq-array > table {
+  border-collapse: collapse;
+}
+.mq-array > table > tr > td.mq-array-border-left {
+  border-left-color: #000000;
+  border-left-width: 0.08em;
+  border-left-style: solid;
+}
+.mq-array > table > tr > td.mq-array-border-right {
+  border-right-color: #000000;
+  border-right-width: 0.08em;
+  border-right-style: solid;
+}
+.mq-array > table > tr > td.mq-array-justify-right {
+  text-align: right;
+}
+.mq-array > table > tr > td.mq-array-justify-left {
+  text-align: left;
+}
+.mq-array > table > tr > td.mq-array-justify-center {
+  text-align: center;
 }
 .mq-math-mode .mq-selection,
 .mq-editable-field .mq-selection,
