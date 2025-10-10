@@ -27,8 +27,8 @@
 }
 @font-face {
   font-family: Symbola;
-  src: url(chrome-extension://__MSG_@@extension_id__/deps/mathquill/fonts/Symbola.eot);
-  src: local("Symbola Regular"), local("Symbola"), url(chrome-extension://__MSG_@@extension_id__/deps/mathquill/fonts/Symbola.woff2) format("woff2"), url(chrome-extension://__MSG_@@extension_id__/deps/mathquill/fonts/Symbola.woff) format("woff"), url(chrome-extension://__MSG_@@extension_id__/deps/mathquill/fonts/Symbola.ttf) format("truetype"), url(chrome-extension://__MSG_@@extension_id__/deps/mathquill/fonts/Symbola.svg#Symbola) format("svg");
+  src: url(fonts/Symbola.eot);
+  src: local("Symbola Regular"), local("Symbola"), url(fonts/Symbola.woff2) format("woff2"), url(fonts/Symbola.woff) format("woff"), url(fonts/Symbola.ttf) format("truetype"), url(fonts/Symbola.svg#Symbola) format("svg");
 }
 .mq-editable-field {
   display: -moz-inline-box;
@@ -251,6 +251,39 @@
 }
 .mq-math-mode .mq-int > .mq-supsub > .mq-sub {
   margin-left: -0.35em;
+}
+.mq-math-mode .mq-int > big {
+  display: inline-block;
+  -webkit-transform: scaleX(0.7);
+  -moz-transform: scaleX(0.7);
+  -ms-transform: scaleX(0.7);
+  -o-transform: scaleX(0.7);
+  transform: scaleX(0.7);
+  vertical-align: -0.16em;
+}
+.mq-math-mode .mq-int > .mq-supsub {
+  font-size: 80%;
+  vertical-align: -1.1em;
+  padding-right: .2em;
+}
+.mq-math-mode .mq-int > .mq-supsub > .mq-sup > .mq-sup-inner {
+  vertical-align: 1.3em;
+}
+.mq-math-mode .mq-int > .mq-supsub > .mq-sub {
+  margin-left: -0.35em;
+}
+.mq-math-mode .mq-limit {
+  text-align: center;
+}
+.mq-math-mode .mq-limit .mq-lim {
+  display: block;
+}
+.mq-math-mode .mq-limit .mq-approaches {
+  font-size: 80%;
+  float: right;
+  /* take out of normal flow to manipulate baseline */
+  width: 100%;
+  display: block;
 }
 .mq-math-mode .mq-roman {
   font-style: normal;
@@ -518,6 +551,34 @@
   /* defensive resets */
   padding: 0.1em 0.3em;
   vertical-align: baseline;
+}
+.mq-array > table {
+  border-collapse: collapse;
+}
+.mq-array > table tr > td.mq-vertical-separator {
+  background-image: linear-gradient(#000, #000);
+  background-size: 1px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  padding-left: 1.5px;
+  padding-right: 1.5px;
+}
+.mq-array > table tr > td.mq-array-block-padding {
+  padding: 0;
+}
+td.mq-array-block-padding > span {
+  padding: 0.1em 0.3em;
+  display: block;
+  margin: 1.5px;
+}
+.mq-array > table tr > td.mq-array-justify-r {
+  text-align: right;
+}
+.mq-array > table tr > td.mq-array-justify-l {
+  text-align: left;
+}
+.mq-array > table tr > td.mq-array-justify-c {
+  text-align: center;
 }
 .mq-math-mode .mq-selection,
 .mq-editable-field .mq-selection,

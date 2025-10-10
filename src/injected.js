@@ -14,8 +14,8 @@ HTMLElement.prototype.htmlContent = function(html) {
 }
 
 // Get the bindings for the codemirror API
-let getCodeMirror = new Promise( 
-  (resolve) => { 
+let getCodeMirror = new Promise(
+  (resolve) => {
     window.addEventListener( 'UNSTABLE_editor:extensions',
       (event)=>{
         codeMirror = event.detail.CodeMirror;
@@ -27,7 +27,7 @@ let getCodeMirror = new Promise(
 function getView(){
   return new Promise( async (resolve)=>{
     await getCodeMirror;
-    
+
     view = codeMirror.EditorView.findFromDOM(document);
     let configInterval = setInterval(function(){
       if( view.state.config.base.length > 0 ) {
@@ -69,8 +69,7 @@ function setupMathQuill() {
   editorDiv.id = "editorDiv";
   const mathSpan = document.createElement('span');
   mathSpan.id = "mq-editor-field";
-  const resultsDiv = document.createElement('div');
-  resultsDiv.id = "resultsDiv"
+
   editorDiv.appendChild(mathSpan);
   document.body.appendChild(editorDiv);
   editorDiv.style.display = "none"
@@ -91,12 +90,17 @@ function setupMathQuill() {
     charsThatBreakOutOfSupSub: "",
     handlers: {
       "edit": function() {
-        resultsDiv.replaceChildren();
         closestCommands = [];
         suggestionIndex = false;
         const commandWrapper = getCommandWrapper(editorInstance);
         if(commandWrapper) {
           if(!commandWrapper.overquillFix) {
+
+            const resultsDiv = document.createElement('div');
+            resultsDiv.id = "resultsDiv";
+            commandWrapper._el.firstChild.appendChild(resultsDiv);
+            commandWrapper.resultsDiv = resultsDiv;
+
             commandWrapper.overquillFix = true;
             const endsL = commandWrapper.getEnd(-1);
             let originalLatex = endsL.latex;
@@ -109,6 +113,8 @@ function setupMathQuill() {
               originalKeystroke.call(endsL, key, e, ctrlr);
             }
           }
+          const resultsDiv = commandWrapper.resultsDiv;
+          resultsDiv.replaceChildren()
           const text = commandWrapper.text()
           if(text.length > 1) {
             const partialCommand = text.slice(1);
@@ -127,10 +133,14 @@ function setupMathQuill() {
               resultSpan.id = "result-" + i;
               resultSpan.classList.add("resultSpan")
               resultSpan.htmlContent( UfuzzyMin.highlight(registeredCommands[info.idx[infoIdx]], info.ranges[infoIdx], mark));
-              resultSpan.addEventListener("click", ()=>{
+              resultSpan.addEventListener("click", ()=> {
                 suggestionIndex = i;
                 commandWrapper.renderCommand(editorInstance.__controller.cursor);
               },{once: true});
+              resultSpan.addEventListener("pointerdown", function(e) {
+                // Prevent MathQuill from moving cursor for button clicks
+                e.preventDefault();
+              }, false)
               resultsDiv.appendChild(resultSpan);
               closestCommands.push({text:command, element: resultSpan});
             }
@@ -141,8 +151,6 @@ function setupMathQuill() {
   })
 
   registeredCommands = editorInstance.getCommandKeys();
-
-  editorSpan.appendChild(resultsDiv)
 
   editorSpan.addEventListener("keydown", function(event) {
     if(!editorShown) return;
@@ -223,7 +231,7 @@ getCodeMirror.then( ()=>{
       let oldCompartment = view.state.config.compartments.keys().next();
       kbCompartment = oldCompartment.value.of(keymap.of([]));
       kbCompartment.compartment =  new oldCompartment.value.constructor;
-      
+
       function getPrec(configBase){
         if(Array.isArray(configBase)) {
           for(const child of configBase.values() ){
