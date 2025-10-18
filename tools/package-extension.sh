@@ -1,6 +1,6 @@
 node tools/build-extension.js "$1"
 cd build/temp || exit
-zip -r "OverQuill-$1.zip" .
+zip -r "OverQuill-$1.zip" . -x '.*' -x '**/__MACOSX'
 mv "OverQuill-$1.zip" "../"
 cd ../ || exit
 if [ -d "temp" ]; then rm -Rf "temp"; fi

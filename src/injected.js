@@ -27,7 +27,6 @@ let getCodeMirror = new Promise(
 function getView(){
   return new Promise( async (resolve)=>{
     await getCodeMirror;
-
     view = codeMirror.EditorView.findFromDOM(document);
     let configInterval = setInterval(function(){
       if( view.state.config.base.length > 0 ) {
@@ -242,7 +241,6 @@ getCodeMirror.then( ()=>{
           if("prec" in configBase) {
             Prec = configBase.constructor;
           }
-
         }
       }
       getPrec(view.state.config.base);
@@ -254,7 +252,7 @@ getCodeMirror.then( ()=>{
     loadShortcuts(settings.shortcuts);
     view.dispatch({
       effects: kbCompartment.compartment.reconfigure(
-        new Prec(keymap.of(shortcuts),1)
+        codeMirror.Prec.highest(keymap.of(shortcuts))
       )
     });
   });
